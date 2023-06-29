@@ -12,8 +12,8 @@ class Requete (Model):
         Recupérer les menus de la carte
         """
         req = """
-                SELECT id_menu, nom, image, prix
-                FROM menus
+                SELECT id_menu, nom_plat, image, prix
+                FROM menus_carte
         """
         self.cursor.execute(req)
         result = self.cursor.fetchall()
