@@ -12,7 +12,6 @@ query = Model()
 
 @ampalibe.command('/')
 def main(sender_id, cmd, **ext):
-    print("Tonga e", sender_id)
     chat.get_started()
     chat.send_text(sender_id, "Bienvenue chez MenuViz👌😊🍕 !")
     chat.send_text(sender_id, "Explorez notre gamme de fonctionnalités, laissez libre cours à votre créativité et transformez vos menus en une véritable expérience visuelle. Nous sommes là pour vous guider à chaque étape et vous aider à créer des menus qui raviront vos clients et renforceront votre image de marque.")
