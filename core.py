@@ -4,6 +4,8 @@ from ampalibe.ui import QuickReply, Button, Type, Element
 from conf import Configuration as config
 from ampalibe.messenger import Filetype
 from requete import Requete
+import qrcode
+import os
 
 chat = Messenger()
 query = Model()
@@ -50,7 +52,7 @@ def GetAllMenus(sender_id, cmd, **ext):
             Button(
                 type = Type.postback,
                 title = "Visualiser le menu",
-                payload = Payload("/qrcode", id_vacc= str(menus[i][0]))
+                payload = Payload("/qrcode", id_menu= str(menus[i][0]), nom_menu = str(menus[i][1]))
             )
         ]
         data.append(
@@ -65,4 +67,24 @@ def GetAllMenus(sender_id, cmd, **ext):
         
     chat.send_template(sender_id, data, next=True )
     
+@ampalibe.command('/qrcode')
+def Get_QRCode(sender_id, id_menu, nom_menu, **ext):
+    personas = chat.get_personas(876103446353988)
+    data = personas['name'], id_menu, nom_menu
+    print(data)
 
+    qr = qrcode.make(data)
+    qr.show()
+    menu_file = nom_menu.replace(" ", "")
+    file_name = f"{menu_file}qr.png"
+    image_path = f"assets/public/{file_name}"
+    
+
+    if os.path.exists(image_path):
+        print("L'image QR existe déjà.")
+    else:
+        print("L'image QR n'existe pas.")
+        qr.save(image_path)
+
+    chat.send_text(sender_id, "Découvrez une expérience immersive en scannant ce QR code avec l'application FoodScope ! Vous pourrez ainsi visualiser en temps réel le plat que vous êtes sur le point de commander. Plongez-vous dans une expérience visuelle captivante et laissez-vous transporter par la magie de la réalité augmentée pour une expérience culinaire unique.")
+    chat.send_file(sender_id, image_path, reusable=True)
